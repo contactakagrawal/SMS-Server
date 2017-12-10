@@ -5,6 +5,8 @@
     let cors = require('cors')
     let bodyParser = require('body-parser');
     let jwt = require('jwt-simple');
+    const fileUpload = require('express-fileupload');
+    let PORT = 3000;
 
     let MongoClient = require('mongodb').MongoClient;
     let constants = require('./app/constants/constants');
@@ -12,10 +14,8 @@
     app.use(bodyParser.json());
     app.use(cors());
     app.use(express.static('dist'));
-    
-    process.on('exit', function () {
-        console.log('About to exit.');
-    });
+    app.use(express.static('studentpics'));
+    app.use(fileUpload());
     
     // Initialize connection once
     MongoClient.connect("mongodb://localhost:27017/JPS", function(err, database) {
@@ -23,8 +23,8 @@
       constants.db = database;
 
       // Start the application after the database connection is ready
-      app.listen(3000, function(){
-          console.log("Listening on port 3000");
+      app.listen(PORT, function(){
+          console.log(`Listening on port ${PORT}`);
       });
     });
     
